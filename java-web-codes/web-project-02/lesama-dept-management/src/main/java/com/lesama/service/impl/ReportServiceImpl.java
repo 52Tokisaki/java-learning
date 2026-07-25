@@ -25,4 +25,9 @@ public class ReportServiceImpl implements ReportService {
     public List<Map<String, Object>> countEmpGenderData() {
         return reportMapper.countEmpGenderData();
     }
+
+    @Override
+    public List<Map<String, Object>> countStudentDegreeData() {
+        return reportMapper.countStudentDegreeData();
+    }
 }

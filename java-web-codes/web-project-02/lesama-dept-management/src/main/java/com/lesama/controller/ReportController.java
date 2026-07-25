@@ -23,4 +23,9 @@ public class ReportController {
     public Result countEmpGenderData() {
         return Result.success(reportService.countEmpGenderData());
     }
+
+    @GetMapping("/studentDegreeData")
+    public Result countStudentDegreeData() {
+        return Result.success(reportService.countStudentDegreeData());
+    }
 }

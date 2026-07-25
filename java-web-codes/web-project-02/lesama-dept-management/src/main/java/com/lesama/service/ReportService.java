@@ -9,4 +9,6 @@ public interface ReportService {
     JobOption countJobOption();
 
     List<Map<String, Object>> countEmpGenderData();
+
+    List<Map<String, Object>> countStudentDegreeData();
 }

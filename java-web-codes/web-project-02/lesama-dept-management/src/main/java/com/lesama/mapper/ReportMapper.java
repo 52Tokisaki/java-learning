@@ -11,4 +11,6 @@ public interface ReportMapper {
     public List<Map<String, Object>> countJobOption();
 
     List<Map<String, Object>> countEmpGenderData();
+
+    List<Map<String, Object>> countStudentDegreeData();
 }
