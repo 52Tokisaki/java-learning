@@ -2,6 +2,7 @@ package com.lesama.service.impl;
 
 import com.lesama.mapper.ReportMapper;
 import com.lesama.pojo.JobOption;
+import com.lesama.pojo.StudentOption;
 import com.lesama.service.ReportService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,13 @@ public class ReportServiceImpl implements ReportService {
     @Override
     public List<Map<String, Object>> countStudentDegreeData() {
         return reportMapper.countStudentDegreeData();
+    }
+
+    @Override
+    public StudentOption countStudentCountData() {
+        List<Map<String, Object>> mapList = reportMapper.countStudentCountData();
+        List<Object> clazzList = mapList.stream().map(dataMap -> dataMap.get("name")).toList();
+        List<Object> dataList = mapList.stream().map(dataMap -> dataMap.get("value")).toList();
+        return new StudentOption(clazzList, dataList);
     }
 }

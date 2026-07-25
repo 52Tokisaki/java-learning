@@ -28,4 +28,9 @@ public class ReportController {
     public Result countStudentDegreeData() {
         return Result.success(reportService.countStudentDegreeData());
     }
+
+    @GetMapping("/studentCountData")
+    public Result countStudentCountData() {
+        return Result.success(reportService.countStudentCountData());
+    }
 }

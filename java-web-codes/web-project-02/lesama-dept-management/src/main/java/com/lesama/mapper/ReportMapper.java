@@ -13,4 +13,6 @@ public interface ReportMapper {
     List<Map<String, Object>> countEmpGenderData();
 
     List<Map<String, Object>> countStudentDegreeData();
+
+    List<Map<String, Object>> countStudentCountData();
 }

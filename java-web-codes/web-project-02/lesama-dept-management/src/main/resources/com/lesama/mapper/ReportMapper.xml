@@ -28,4 +28,7 @@
                     end
                 ) name, count(*) value from student group by degree;
     </select>
+    <select id="countStudentCountData" resultType="java.util.Map">
+        select c.name name, count(*) value from clazz c, student s where c.id = s.clazz_id group by c.name;
+    </select>
 </mapper>
