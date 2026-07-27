@@ -2,6 +2,7 @@ package com.lesama.service;
 
 import com.lesama.pojo.Emp;
 import com.lesama.pojo.EmpQuery;
+import com.lesama.pojo.LoginInfo;
 import com.lesama.pojo.PageResult;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -23,4 +24,6 @@ public interface EmpService {
     void updateById(Emp emp);
 
     List<Emp> list();
+
+    LoginInfo login(Emp emp);
 }

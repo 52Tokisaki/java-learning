@@ -106,4 +106,14 @@ public class EmpServiceImpl implements EmpService {
         return empMapper.queryAll();
     }
 
+    @Override
+    public LoginInfo login(Emp emp) {
+
+        Emp e = empMapper.getByUsernameAndPassword(emp.getUsername(), emp.getPassword());
+        if (e == null) {
+            return null;
+        }
+        return new LoginInfo(e.getId(), e.getUsername(), e.getName(), "");
+    }
+
 }
