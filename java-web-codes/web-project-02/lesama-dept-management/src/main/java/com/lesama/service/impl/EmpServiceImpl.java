@@ -6,6 +6,7 @@ import com.lesama.mapper.EmpExprMapper;
 import com.lesama.mapper.EmpMapper;
 import com.lesama.pojo.*;
 import com.lesama.service.EmpService;
+import com.lesama.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -14,7 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class EmpServiceImpl implements EmpService {
@@ -110,10 +113,15 @@ public class EmpServiceImpl implements EmpService {
     public LoginInfo login(Emp emp) {
 
         Emp e = empMapper.getByUsernameAndPassword(emp.getUsername(), emp.getPassword());
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("id", e.getId());
+        claims.put("username", e.getUsername());
+        long expiration = 60 * 60 * 1000;
+        String token = JwtUtil.generateToken(claims, expiration);
         if (e == null) {
             return null;
         }
-        return new LoginInfo(e.getId(), e.getUsername(), e.getName(), "");
+        return new LoginInfo(e.getId(), e.getUsername(), e.getName(), token);
     }
 
 }
