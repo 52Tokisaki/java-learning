@@ -1,6 +1,5 @@
-package com.lesama.webconfig;
+package com.lesama.config;
 
-import com.lesama.interceptor.DemoInterceptor;
 import com.lesama.interceptor.TokenInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
@@ -19,6 +18,9 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         // 注册拦截器
 //        registry.addInterceptor(demoInterceptor);
-        registry.addInterceptor(tokenInterceptor);
+        // /** 表示所有路径, /*表示一级路径
+        registry.addInterceptor(tokenInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns("/login");
     }
 }

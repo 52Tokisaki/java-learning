@@ -16,11 +16,12 @@ public class TokenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         // 1. 获取请求路径，若包含/login 则放行
-        String requestURI = request.getRequestURI();
-        if (requestURI.contains("/login")){
-            log.info("登录请求");
-            return true;
-        }
+        // 在注册拦截器的时候将login路径排除了，所以这里不需要判断login路径
+//        String requestURI = request.getRequestURI();
+//        if (requestURI.contains("/login")){
+//            log.info("登录请求");
+//            return true;
+//        }
         // 2. 获取请求头中的token
         String token = request.getHeader("token");
 
