@@ -7,7 +7,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Aspect
+//@Aspect
 @Component
 @Order(1)
 // 演示切面类的五种通知类型

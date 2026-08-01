@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.*;
 import org.springframework.stereotype.Component;
 
 @Slf4j
-@Aspect
+//@Aspect
 @Component
 // 演示切面类的五种通知类型
 public class MyAspect1 {
