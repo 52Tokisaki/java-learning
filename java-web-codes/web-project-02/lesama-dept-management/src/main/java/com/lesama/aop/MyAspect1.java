@@ -11,12 +11,16 @@ import org.springframework.stereotype.Component;
 // 演示切面类的五种通知类型
 public class MyAspect1 {
 
-    @Before("execution(* com.lesama.service.impl.*.*(..))")
+    @Pointcut("execution(* com.lesama.service.impl.*.*(..))")
+    public void pointcut() {
+    }
+
+    @Before("pointcut()")
     public void before() {
         log.info("MyAspect1 before");
     }
 
-    @Around("execution(* com.lesama.service.impl.*.*(..))")
+    @Around("pointcut()")
     public Object around(ProceedingJoinPoint pjp) throws Throwable {
         log.info("MyAspect1 around before");
         Object result = pjp.proceed();
@@ -24,17 +28,17 @@ public class MyAspect1 {
         return result;
     }
 
-    @After("execution(* com.lesama.service.impl.*.*(..))")
+    @After("pointcut()")
     public void after() {
         log.info("MyAspect1 after");
     }
 
-    @AfterReturning("execution(* com.lesama.service.impl.*.*(..))")
+    @AfterReturning("pointcut()")
     public void afterReturning() {
         log.info("MyAspect1 afterReturning");
     }
 
-    @AfterThrowing("execution(* com.lesama.service.impl.*.*(..))")
+    @AfterThrowing("pointcut()")
     public void afterThrowing() {
         log.info("MyAspect1 afterThrowing");
     }
