@@ -2,6 +2,7 @@ package com.lesama.service.impl;
 
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.lesama.annotation.LogOperation;
 import com.lesama.mapper.EmpExprMapper;
 import com.lesama.mapper.EmpMapper;
 import com.lesama.pojo.*;
@@ -110,6 +111,7 @@ public class EmpServiceImpl implements EmpService {
     }
 
     @Override
+    @LogOperation
     public LoginInfo login(Emp emp) {
 
         Emp e = empMapper.getByUsernameAndPassword(emp.getUsername(), emp.getPassword());
