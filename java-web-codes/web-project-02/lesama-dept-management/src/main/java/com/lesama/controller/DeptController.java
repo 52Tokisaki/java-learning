@@ -1,5 +1,6 @@
 package com.lesama.controller;
 
+import com.lesama.annotation.LogOperation;
 import com.lesama.pojo.Dept;
 import com.lesama.pojo.Result;
 import com.lesama.service.DeptService;
@@ -54,6 +55,7 @@ public class DeptController {
     /**
      * 接收请求参数的方式三：使用形参名称（只有当形参名称与请求参数名称一致时）
      * */
+    @LogOperation
     @DeleteMapping
     public Result delete(Integer id) {
         deptService.deleteById(id);
@@ -66,6 +68,7 @@ public class DeptController {
     /**
      * 新增部门
      * */
+    @LogOperation
     @PostMapping
     public Result add(@RequestBody Dept dept) {
         log.info("新增的部门为：{}", dept);
@@ -84,6 +87,7 @@ public class DeptController {
     /**
      * 修改部门
      * */
+    @LogOperation
     @PutMapping
     public Result update(@RequestBody Dept dept) {
         log.info("修改的部门为：{}", dept);

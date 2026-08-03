@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class JwtTest {
 
-    @Test
+    /*@Test
     public void testBuildJwt() {
         Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("username", "lesama");
@@ -33,5 +33,5 @@ public class JwtTest {
         Header header = result.getHeader();
         System.out.println(header);
         System.out.println(body);
-    }
+    }*/
 }

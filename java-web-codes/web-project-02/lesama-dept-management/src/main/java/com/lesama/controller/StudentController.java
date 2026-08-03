@@ -1,5 +1,6 @@
 package com.lesama.controller;
 
+import com.lesama.annotation.LogOperation;
 import com.lesama.pojo.Result;
 import com.lesama.pojo.Student;
 import com.lesama.pojo.StudentQuery;
@@ -22,6 +23,7 @@ public class StudentController {
     }
 
     @PostMapping
+    @LogOperation
     public Result add(@RequestBody Student student) {
         log.info("新增学生：{}", student);
         studentService.save(student);
@@ -29,6 +31,7 @@ public class StudentController {
     }
 
     @DeleteMapping("/{id}")
+    @LogOperation
     public Result delete(@PathVariable Integer id) {
         log.info("删除学生：{}", id);
         studentService.delete(id);
@@ -42,6 +45,7 @@ public class StudentController {
     }
 
     @PutMapping
+    @LogOperation
     public Result update(@RequestBody Student student) {
         log.info("更新学生：{}", student);
         studentService.update(student);
@@ -49,6 +53,7 @@ public class StudentController {
     }
 
     @PutMapping("/violation/{id}/{violationScore}")
+    @LogOperation
     public Result addViolationScore(@PathVariable Integer id, @PathVariable Short violationScore) {
         log.info("增加学生违纪分数，学生id：{}，违纪分数：{}", id, violationScore);
         Student student = studentService.getById(id);

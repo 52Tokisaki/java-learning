@@ -1,6 +1,8 @@
 package com.lesama.interceptor;
 
+import com.lesama.utils.CurrentHolder;
 import com.lesama.utils.JwtUtil;
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +33,9 @@ public class TokenInterceptor implements HandlerInterceptor {
 
         // 4. 解析 token， 若token解析失败，则返回401状态码
         try {
-            JwtUtil.parseToken(token);
+            Claims claims = JwtUtil.parseToken(token);
+            Integer empId = Integer.valueOf(claims.get("id").toString());
+            CurrentHolder.setCurrentId(empId);
         } catch (Exception e) {
             log.error("token解析失败");
             response.setStatus(401);

@@ -1,5 +1,6 @@
 package com.lesama.controller;
 
+import com.lesama.annotation.LogOperation;
 import com.lesama.pojo.Emp;
 import com.lesama.pojo.EmpQuery;
 import com.lesama.pojo.PageResult;
@@ -37,6 +38,7 @@ public class EmpController {
     }
 
     @PostMapping
+    @LogOperation
     public Result save(@RequestBody Emp emp) {
         log.info("新增员工，员工数据：{}", emp);
         empService.save(emp);
@@ -44,6 +46,7 @@ public class EmpController {
     }
 
     @DeleteMapping
+    @LogOperation
     public Result delete(@RequestParam List<Integer> ids) {
         log.info("删除员工，员工id：{}", ids);
         empService.delete(ids);
@@ -64,6 +67,7 @@ public class EmpController {
      * 根据id修改员工
      * */
     @PutMapping
+    @LogOperation
     public Result update(@RequestBody Emp emp) {
         log.info("修改员工，员工数据：{}", emp);
         empService.updateById(emp);

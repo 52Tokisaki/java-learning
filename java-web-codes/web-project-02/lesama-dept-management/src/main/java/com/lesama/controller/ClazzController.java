@@ -1,5 +1,6 @@
 package com.lesama.controller;
 
+import com.lesama.annotation.LogOperation;
 import com.lesama.pojo.Clazz;
 import com.lesama.pojo.ClazzQuery;
 import com.lesama.pojo.Result;
@@ -22,6 +23,7 @@ public class ClazzController {
     }
 
     @PostMapping
+    @LogOperation
     public Result add(@RequestBody Clazz clazz) {
         log.info("新增班级：{}", clazz);
         clazzService.save(clazz);
@@ -29,6 +31,7 @@ public class ClazzController {
     }
 
     @DeleteMapping("/{id}")
+    @LogOperation
     public Result delete(@PathVariable Integer id) {
         log.info("删除的班级Id为：{}", id);
         clazzService.delete(id);
@@ -42,6 +45,7 @@ public class ClazzController {
     }
 
     @PutMapping
+    @LogOperation
     public Result update(@RequestBody Clazz clazz) {
         log.info("更新班级，班级信息：{}", clazz);
         clazzService.update(clazz);
