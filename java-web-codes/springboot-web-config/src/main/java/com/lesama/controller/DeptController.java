@@ -4,14 +4,22 @@ import com.lesama.pojo.Dept;
 import com.lesama.pojo.Result;
 import com.lesama.service.DeptService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Scope;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
+@Lazy
+//@Scope("prototype") // 创建prototype实例，多实例
 @RestController
 public class DeptController {
 
     @Autowired
     private DeptService deptService;
+
+    public DeptController() {
+        System.out.println("创建DeptController实例");
+    }
 
     /**
      * 查询全部部门
