@@ -18,3 +18,4 @@ aliyun:
     region: cn-beijing
 server:
   port: 8081
+name: lesama
