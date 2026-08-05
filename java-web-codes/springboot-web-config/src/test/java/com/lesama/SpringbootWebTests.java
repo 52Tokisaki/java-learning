@@ -1,6 +1,9 @@
 package com.lesama;
 
 import cn.hutool.core.io.FileUtil;
+import com.example.HeaderConfig;
+import com.example.HeaderGenerator;
+import com.example.HeaderParser;
 import com.example.TokenParser;
 import com.google.gson.Gson;
 import com.lesama.controller.DeptController;
@@ -53,5 +56,23 @@ class SpringbootWebTests {
     @Test
     void testTokenParser() {
         System.out.println(applicationContext.getBean(TokenParser.class));
+    }
+
+    @Autowired
+    private HeaderParser headerParser;
+
+    @Autowired
+    private HeaderGenerator headerGenerator;
+    @Test
+    void testHeader() {
+        System.out.println(applicationContext.getBean(HeaderParser.class));
+        System.out.println(applicationContext.getBean(HeaderGenerator.class));
+    }
+
+    @Autowired
+    private HeaderConfig headerConfig;
+    @Test
+    void testHeaderConfig() {
+        System.out.println(applicationContext.getBean(HeaderConfig.class));
     }
 }
