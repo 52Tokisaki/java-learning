@@ -1,7 +1,10 @@
 package com.lesama;
 
 import cn.hutool.core.io.FileUtil;
+import com.example.TokenParser;
+import com.google.gson.Gson;
 import com.lesama.controller.DeptController;
+import com.lesama.pojo.Result;
 import com.lesama.utils.AliyunOSSOperator;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +38,20 @@ class SpringbootWebTests {
         File file = new File("C:\\Users\\Administrator\\Pictures\\2\\daniya.png");
         byte[] bytes = FileUtil.readBytes(file);
         aliyunOSSOperator.upload(bytes, "daniya.png");
+    }
+
+    @Autowired
+    private Gson gson;
+    // 测试自动配置
+    @Test
+    void testGson() {
+        System.out.println(gson.toJson(Result.success("hello gson")));
+    }
+
+    @Autowired
+    private TokenParser tokenParser;
+    @Test
+    void testTokenParser() {
+        System.out.println(applicationContext.getBean(TokenParser.class));
     }
 }
