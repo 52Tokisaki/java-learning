@@ -7,13 +7,17 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="springboot-web-config" />
+        <module name="springboot-autoconfiguration-test" />
+        <module name="aliyun-oss-spring-boot-starter" />
         <module name="lesama-utils" />
+        <module name="aliyun-oss-spring-boot-autoconfigure" />
       </profile>
       <profile name="Annotation profile for lesama-dept-management" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../develop/apache-maven-3.9.4/mvn_repo/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
           <entry name="$PROJECT_DIR$/../../../develop/apache-maven-3.9.4/mvn_repo/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
         </processorPath>
         <module name="lesama-dept-management" />
@@ -23,7 +27,10 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="aliyun-oss-spring-boot-autoconfigure" options="-parameters" />
+      <module name="aliyun-oss-spring-boot-starter" options="-parameters" />
       <module name="lesama-dept-management" options="-parameters" />
+      <module name="springboot-autoconfiguration-test" options="-parameters" />
       <module name="springboot-web-config" options="-parameters" />
     </option>
   </component>
