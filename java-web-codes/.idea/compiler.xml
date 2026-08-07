@@ -22,6 +22,15 @@
         </processorPath>
         <module name="lesama-dept-management" />
       </profile>
+      <profile name="Annotation profile for lesama-dept-management (1)" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../develop/apache-maven-3.9.4/mvn_repo/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
+        </processorPath>
+        <module name="lesama-dept-management (1)" />
+      </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17" />
   </component>
@@ -30,6 +39,7 @@
       <module name="aliyun-oss-spring-boot-autoconfigure" options="-parameters" />
       <module name="aliyun-oss-spring-boot-starter" options="-parameters" />
       <module name="lesama-dept-management" options="-parameters" />
+      <module name="lesama-dept-management (1)" options="-parameters" />
       <module name="springboot-autoconfiguration-test" options="-parameters" />
       <module name="springboot-web-config" options="-parameters" />
     </option>

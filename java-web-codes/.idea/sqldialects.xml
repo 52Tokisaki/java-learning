@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/web-project-03/lesama-dept-management/src/main/resources/table_references.sql" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/web-project-03/lesama-dept-management/target/classes/table_references.sql" dialect="GenericSQL" />
+  </component>
+</project>
