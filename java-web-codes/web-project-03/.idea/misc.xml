@@ -7,6 +7,7 @@
         <option value="$PROJECT_DIR$/lesama-pojo/pom.xml" />
         <option value="$PROJECT_DIR$/lesama-dept-management/pom.xml" />
         <option value="$PROJECT_DIR$/lesama-utils/pom.xml" />
+        <option value="$PROJECT_DIR$/lesama-parent/pom.xml" />
       </list>
     </option>
   </component>
