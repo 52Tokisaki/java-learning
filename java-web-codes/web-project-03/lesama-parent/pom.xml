@@ -65,4 +65,10 @@
         </dependencies>
     </dependencyManagement>
 
+    <modules>
+        <module>../lesama-pojo</module>
+        <module>../lesama-utils</module>
+        <module>../lesama-dept-management</module>
+    </modules>
+
 </project>

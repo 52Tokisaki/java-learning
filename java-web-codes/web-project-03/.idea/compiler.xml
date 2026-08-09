@@ -9,11 +9,12 @@
         <module name="lesama-pojo" />
         <module name="lesama-utils" />
       </profile>
-      <profile name="Annotation profile for lesama-dept-management" enabled="true">
+      <profile name="Annotation profile for lesama-parent" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
+          <entry name="$PROJECT_DIR$/../../../../develop/apache-maven-3.9.4/mvn_repo/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
           <entry name="$PROJECT_DIR$/../../../../develop/apache-maven-3.9.4/mvn_repo/org/projectlombok/lombok/1.18.34/lombok-1.18.34.jar" />
         </processorPath>
         <module name="lesama-dept-management" />
