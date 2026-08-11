@@ -11,7 +11,7 @@ public class WebConfig implements WebMvcConfigurer {
 
 /*    @Autowired
     private DemoInterceptor demoInterceptor;*/
-
+/*
     @Autowired
     private TokenInterceptor tokenInterceptor;
     @Override
@@ -22,5 +22,5 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(tokenInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns("/login");
-    }
+    }*/
 }
