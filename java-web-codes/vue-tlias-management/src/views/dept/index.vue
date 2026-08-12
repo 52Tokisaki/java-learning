@@ -1,21 +1,42 @@
 <script setup>
-
 import { onMounted, ref } from "vue";
-import { getDeptById, getDeptList, insertDept, updateDept } from "@/api/dept";
-import { ElMessage } from "element-plus";
+import {
+  deleteDeptById,
+  getDeptById,
+  getDeptList,
+  insertDept,
+  updateDept,
+} from "@/api/dept";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const deptList = ref([]);
 
 const handleEdit = async (id) => {
-  console.log('修改部门', id);
+  console.log("修改部门", id);
   const result = await getDeptById(id);
   deptForm.value = result.data;
-  dialogTitle.value = '修改部门';
+  dialogTitle.value = "修改部门";
   showDialog.value = true;
+  formRef.value.resetFields();
 };
 
 const handleDelete = (id) => {
-  console.log('删除部门', id);
+  console.log("删除部门", id);
+  ElMessageBox.confirm("确认要删除该部门吗?", "Warning", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      const result = await deleteDeptById(id);
+      if (result.code === 1) {
+        ElMessage({
+          type: "success",
+          message: "删除部门成功",
+        });
+      }
+    })
+    .catch(() => {});
 };
 
 const getTableData = async () => {
@@ -24,18 +45,18 @@ const getTableData = async () => {
 };
 
 const showDialog = ref(false);
-const dialogTitle = ref('');
-const deptForm = ref({ name: '' });
+const dialogTitle = ref("");
+const deptForm = ref({ name: "" });
 const formRef = ref();
 const rules = ref({
   name: [
-    { required: true, message: '请输入部门名称', trigger: 'blur' },
-    { min: 2, max: 10, message: '部门名称长度为2-10位字符', trigger: 'blur' },
+    { required: true, message: "请输入部门名称", trigger: "blur" },
+    { min: 2, max: 10, message: "部门名称长度为2-10位字符", trigger: "blur" },
   ],
 });
 
 const addDept = () => {
-  dialogTitle.value = '新增部门';
+  dialogTitle.value = "新增部门";
   showDialog.value = true;
   formRef.value.resetFields();
 };
@@ -47,24 +68,24 @@ const onSubmit = () => {
     return;
   }
 
-  formRef.value.validate(async valid => {
+  formRef.value.validate(async (valid) => {
     if (!valid) {
-      ElMessage.error('表单校验失败');
+      ElMessage.error("表单校验失败");
       return;
     }
-    if (dialogTitle.value === '新增部门') {
+    if (dialogTitle.value === "新增部门") {
       const result = await insertDept(deptForm.value);
       if (result.code === 1) {
-        ElMessage.success('新增部门成功');
+        ElMessage.success("新增部门成功");
       } else {
-        ElMessage.error('新增部门失败');
+        ElMessage.error("新增部门失败");
       }
-    } else if (dialogTitle.value === '修改部门') {
+    } else if (dialogTitle.value === "修改部门") {
       const result = await updateDept(deptForm.value.id, deptForm.value);
       if (result.code === 1) {
-        ElMessage.success('修改部门成功');
+        ElMessage.success("修改部门成功");
       } else {
-        ElMessage.error('修改部门失败');
+        ElMessage.error("修改部门失败");
       }
     }
     showDialog.value = false;
@@ -116,9 +137,7 @@ onMounted(() => {
     <template #footer>
       <div class="dialog-footer">
         <el-button @click="showDialog = false">取消</el-button>
-        <el-button type="primary" @click="onSubmit">
-          确认
-        </el-button>
+        <el-button type="primary" @click="onSubmit"> 确认 </el-button>
       </div>
     </template>
   </el-dialog>
