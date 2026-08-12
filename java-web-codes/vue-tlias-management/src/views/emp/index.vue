@@ -17,8 +17,10 @@ const search = async () => {
   // 处理查询逻辑
   console.log('Search:', searchEmp.value);
   const result = await getEmpList(searchEmp.value);
-  empList.value = result.data.rows;
-  total.value = result.data.total;
+  if (result.code) {
+    empList.value = result.data.rows;
+    total.value = result.data.total;
+  }
 };
 
 const clear = () => {
