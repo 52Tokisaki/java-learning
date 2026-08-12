@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { getEmpList } from "@/api/emp";
 
 const searchEmp = ref({
@@ -7,14 +7,18 @@ const searchEmp = ref({
   gender: '',
   date: [],
   begin: '',
-  end: ''
+  end: '',
+  page: 1,
+  pageSize: 10,
+  total: 0,
 });
 
 const search = async () => {
   // 处理查询逻辑
   console.log('Search:', searchEmp.value);
   const result = await getEmpList(searchEmp.value);
-  console.log('Result:', result);
+  empList.value = result.data.rows;
+  total.value = result.data.total;
 };
 
 const clear = () => {
@@ -36,6 +40,28 @@ watch(() => searchEmp.value.date, (newVal, oldValue) => {
     searchEmp.value.begin = '';
     searchEmp.value.end = '';
   }
+});
+
+// 示例数据
+const empList = ref([]);
+
+// 分页配置
+const pageSize = ref(10);
+const currentPage = ref(1);
+const total = ref(0);
+
+// 分页处理
+const handleSizeChange = (val) => {
+  searchEmp.value.pageSize = val;
+  search();
+};
+const handleCurrentChange = (val) => {
+  searchEmp.value.page = val;
+  search();
+};
+
+onMounted(() => {
+  search();
 });
 </script>
 
@@ -69,6 +95,55 @@ watch(() => searchEmp.value.date, (newVal, oldValue) => {
       <el-button @click="clear">清空</el-button>
     </el-form-item>
   </el-form>
+
+  <!-- 表格 -->
+  <el-table :data="empList" border style="width: 100%">
+    <el-table-column type="selection" width="55" align="center"></el-table-column>
+    <el-table-column prop="name" label="姓名" width="120" align="center"></el-table-column>
+    <el-table-column label="性别" width="170" align="center">
+      <template #default="scope" >
+        {{ scope.row.gender == 1 ? '男' : '女' }}
+      </template>
+    </el-table-column>
+    <el-table-column label="头像" width="170" align="center">
+      <template #default="scope" >
+        <img :src="scope.row.image" alt="Avatar" class="avatar" width="40" height="40" />
+      </template>
+    </el-table-column>
+    <el-table-column prop="deptName" label="部门名称" width="170" align="center"></el-table-column>
+    <el-table-column label="职位" width="120" align="center">
+      <template #default="scope">
+        <span v-if="scope.row.job == 1">班主任</span>
+        <span v-else-if="scope.row.job == 2">讲师</span>
+        <span v-else-if="scope.row.job == 3">学工主管</span>
+        <span v-else-if="scope.row.job == 4">教研主管</span>
+        <span v-else-if="scope.row.job == 5">咨询师</span>
+        <span v-else>其他</span>
+      </template>
+    </el-table-column>
+    <el-table-column prop="entryDate" label="入职日期" width="180" align="center"></el-table-column>
+    <el-table-column prop="updateTime" label="最后操作时间" width="210" align="center"></el-table-column>
+    <el-table-column label="操作" fixed="right" align="center">
+      <template #default="scope">
+        <el-button size="small" type="primary" @click="">编辑</el-button>
+        <el-button size="small" type="danger" @click="">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
+
+  <br>
+
+  <!-- 分页 -->
+  <el-pagination
+    @size-change="handleSizeChange"
+    @current-change="handleCurrentChange"
+    v-model:current-page="currentPage"
+    v-model:page-size="pageSize"
+    :page-sizes="[10, 20, 30, 40]"
+    layout="total, sizes, prev, pager, next, jumper"
+    :total="total"
+  >
+  </el-pagination>
 </template>
 
 <style scoped>

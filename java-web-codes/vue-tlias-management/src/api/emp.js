@@ -6,7 +6,9 @@ export const getEmpList = (params) => {
       name: params.name,
       gender: params.gender,
       begin: params.begin,
-      end: params.end
+      end: params.end,
+      page: params.page,
+      pageSize: params.pageSize,
     },
   });
 };
