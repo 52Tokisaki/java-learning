@@ -1,13 +1,17 @@
 <script setup>
 
 import { onMounted, ref } from "vue";
-import { getDeptList, insertDept } from "@/api/dept";
+import { getDeptById, getDeptList, insertDept, updateDept } from "@/api/dept";
 import { ElMessage } from "element-plus";
 
 const deptList = ref([]);
 
-const handleEdit = (id) => {
+const handleEdit = async (id) => {
   console.log('修改部门', id);
+  const result = await getDeptById(id);
+  deptForm.value = result.data;
+  dialogTitle.value = '修改部门';
+  showDialog.value = true;
 };
 
 const handleDelete = (id) => {
@@ -33,6 +37,7 @@ const rules = ref({
 const addDept = () => {
   dialogTitle.value = '新增部门';
   showDialog.value = true;
+  formRef.value.resetFields();
 };
 
 const onSubmit = () => {
@@ -53,6 +58,13 @@ const onSubmit = () => {
         ElMessage.success('新增部门成功');
       } else {
         ElMessage.error('新增部门失败');
+      }
+    } else if (dialogTitle.value === '修改部门') {
+      const result = await updateDept(deptForm.value.id, deptForm.value);
+      if (result.code === 1) {
+        ElMessage.success('修改部门成功');
+      } else {
+        ElMessage.error('修改部门失败');
       }
     }
     showDialog.value = false;
