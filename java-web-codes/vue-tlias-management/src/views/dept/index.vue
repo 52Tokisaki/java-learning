@@ -21,22 +21,23 @@ const handleEdit = async (id) => {
 };
 
 const handleDelete = (id) => {
-  console.log("删除部门", id);
   ElMessageBox.confirm("确认要删除该部门吗?", "Warning", {
     confirmButtonText: "确认",
     cancelButtonText: "取消",
     type: "warning",
   })
     .then(async () => {
+      console.log("删除部门", id);
       const result = await deleteDeptById(id);
       if (result.code === 1) {
         ElMessage({
           type: "success",
           message: "删除部门成功",
         });
+        await getTableData();
       }
     })
-    .catch(() => {});
+    .catch((err) => {console.log(err)});
 };
 
 const getTableData = async () => {
@@ -89,6 +90,7 @@ const onSubmit = () => {
       }
     }
     showDialog.value = false;
+    await getTableData();
   });
 };
 
