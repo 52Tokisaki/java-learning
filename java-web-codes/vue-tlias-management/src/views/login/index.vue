@@ -1,8 +1,30 @@
 <script setup>
   import { ref } from 'vue'
+  import { useRouter } from "vue-router";
+  import { loginApi } from "@/api/login";
+  let router = useRouter();
   
-  let loginForm = ref({username:'', password:''})
-  
+  let loginForm = ref({username:'', password:''});
+
+  //登录
+  const login = async () => {
+    const result = await loginApi(loginForm.value);
+    if (result.code) {// 登录成功
+      ElMessage.success('登录成功');
+      localStorage.setItem('loginUser', JSON.stringify(result.data));
+      router.push('/')// 跳转
+    }else {
+      ElMessage.error(result.msg);
+    }
+  };
+
+  //取消
+  const clear = () => {
+    loginForm.value = {
+      username: '',
+      password: ''
+    };
+  };
 </script>
 
 <template>
@@ -19,7 +41,7 @@
         </el-form-item>
 
         <el-form-item>
-          <el-button class="button" type="primary" @click="">登 录</el-button>
+          <el-button class="button" type="primary" @click="login">登 录</el-button>
           <el-button class="button" type="info" @click="">重 置</el-button>
         </el-form-item>
       </el-form>
