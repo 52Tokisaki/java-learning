@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import { getEmpList, insertEmp } from "@/api/emp";
+import { getEmpDetailById, getEmpList, insertEmp, updateEmp } from "@/api/emp";
 import { ElMessage } from "element-plus";
 
 const searchEmp = ref({
@@ -158,15 +158,17 @@ const handleDeleteExpr = (index) => {
 };
 
 watch(() => employee.value.exprList, (newVal, oldVal) => {
-  newVal.forEach(expr => {
-    if (expr.exprDate.length == 2) {
-      expr.begin = expr.exprDate[0];
-      expr.end = expr.exprDate[1];
-    } else {
-      expr.begin = '';
-      expr.end = '';
-    }
-  });
+  if (employee.value.exprList?.length) {
+    employee.value.exprList.forEach(expr => {
+      if (expr.exprDate?.length === 2) {
+        expr.begin = expr.exprDate[0];
+        expr.end = expr.exprDate[1];
+      } else {
+        expr.begin = '';
+        expr.end = '';
+      }
+    });
+  }
 }, { deep: true });
 
 const onSubmit = () => {
@@ -179,14 +181,37 @@ const onSubmit = () => {
         const result = await insertEmp(employee.value);
         if (result.code) {
           ElMessage.success('新增员工成功');
-          dialogVisible.value = false;
-          search();
         } else {
           ElMessage.error('新增员工失败');
         }
+      } else if (dialogTitle.value === '修改员工') {
+        const result = await updateEmp(employee.value);
+        if (result.code) {
+          ElMessage.success('修改员工成功');
+        } else {
+          ElMessage.error('修改员工失败');
+        }
       }
+      dialogVisible.value = false;
+      search();
     }
   });
+};
+
+const handleEdit = async (id) => {
+  const result = await getEmpDetailById(id);
+  if (result.code) {
+    employee.value = result.data;
+    console.log(employee.value)
+    employee.value.exprList.forEach(expr => {
+      expr.exprDate = [expr.begin, expr.end];
+      console.log(expr)
+    });
+    dialogTitle.value = '修改员工';
+    dialogVisible.value = true;
+  } else {
+    ElMessage.error('查询员工信息失败');
+  }
 };
 </script>
 
@@ -255,7 +280,7 @@ const onSubmit = () => {
     <el-table-column prop="updateTime" label="最后操作时间" width="210" align="center"></el-table-column>
     <el-table-column label="操作" fixed="right" align="center">
       <template #default="scope">
-        <el-button size="small" type="primary" @click="">编辑</el-button>
+        <el-button size="small" type="primary" @click="handleEdit(scope.row.id)">编辑</el-button>
         <el-button size="small" type="danger" @click="">删除</el-button>
       </template>
     </el-table-column>
