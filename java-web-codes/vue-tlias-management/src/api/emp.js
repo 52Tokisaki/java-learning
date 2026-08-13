@@ -12,3 +12,11 @@ export const getEmpList = (params) => {
     },
   });
 };
+
+export const insertEmp = (emp) => request.post('/emps', emp);
+
+export const getEmpDetailById = (id) => request.get(`/emps/${id}`);
+
+export const updateEmp = (emp) => request.put('/emps', emp);
+
+export const deleteEmp = (ids) => request.delete('/emps', { params: { ids } });
