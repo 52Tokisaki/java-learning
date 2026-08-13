@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
-import { getEmpDetailById, getEmpList, insertEmp, updateEmp } from "@/api/emp";
-import { ElMessage } from "element-plus";
+import { deleteEmp, getEmpDetailById, getEmpList, insertEmp, updateEmp } from "@/api/emp";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const searchEmp = ref({
   name: '',
@@ -213,13 +213,61 @@ const handleEdit = async (id) => {
     ElMessage.error('查询员工信息失败');
   }
 };
+
+const handleDelete = async (id) => {
+  ElMessageBox.confirm("确认要删除该员工吗?", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      const result = await deleteEmp(id);
+      if (result.code === 1) {
+        ElMessage({
+          type: "success",
+          message: "删除员工成功",
+        });
+      }
+      search();
+    })
+    .catch(() => {});
+};
+
+const selectedIds = ref([]);
+const handleSelectionChange = (val) => {
+  selectedIds.value = val.map(emp => emp.id);
+};
+
+const deleteEmpBatch = () => {
+  ElMessageBox.confirm("确认要删除所选员工吗?", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      if (selectedIds.value.length === 0) {
+        ElMessage.info('请先选择员工');
+        return;
+      }
+      const result = await deleteEmp(selectedIds.value.join(','));
+      if (result.code === 1) {
+        ElMessage({
+          type: "success",
+          message: "删除员工成功",
+        });
+      }
+      search();
+    })
+    .catch(() => {});
+};
 </script>
 
 <template>
   <h1>员工管理</h1> <br>
 
   <div style="margin: 20px 0">
-    <el-button type="primary" @click="addEmp">新增员工</el-button>
+    <el-button type="primary" @click="addEmp">+ 新增员工</el-button>
+    <el-button type="primary" @click="deleteEmpBatch">- 批量删除</el-button>
   </div>
 
   <el-form :inline="true" :model="searchEmp">
@@ -252,7 +300,7 @@ const handleEdit = async (id) => {
   </el-form>
 
   <!-- 表格 -->
-  <el-table :data="empList" border style="width: 100%">
+  <el-table :data="empList" border style="width: 100%" @selection-change="handleSelectionChange">
     <el-table-column type="selection" width="55" align="center"></el-table-column>
     <el-table-column prop="name" label="姓名" width="120" align="center"></el-table-column>
     <el-table-column label="性别" width="170" align="center">
@@ -281,7 +329,7 @@ const handleEdit = async (id) => {
     <el-table-column label="操作" fixed="right" align="center">
       <template #default="scope">
         <el-button size="small" type="primary" @click="handleEdit(scope.row.id)">编辑</el-button>
-        <el-button size="small" type="danger" @click="">删除</el-button>
+        <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
       </template>
     </el-table-column>
   </el-table>
