@@ -63,8 +63,19 @@ const handleCurrentChange = (val) => {
   search();
 };
 
+const token = ref('');
+
+//获取token
+const getToken = () => {
+  const loginUser = JSON.parse(localStorage.getItem('loginUser'));
+  if(loginUser && loginUser.token){
+    token.value = loginUser.token;
+  }
+}
+
 onMounted(() => {
   search();
+  getToken(); //获取token
 });
 
 //新增员工
@@ -432,6 +443,7 @@ const deleteEmpBatch = () => {
               :show-file-list="false"
               :on-success="handleAvatarSuccess"
               :before-upload="beforeAvatarUpload"
+              :headers="{'token': token}"
             >
               <img v-if="employee.image" :src="employee.image" class="avatar" />
               <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
