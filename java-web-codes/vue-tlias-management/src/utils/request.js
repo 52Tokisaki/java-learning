@@ -1,4 +1,6 @@
 import axios from "axios";
+import { ElMessage } from "element-plus";
+import router from "@/router";
 
 const request = axios.create({
   baseURL: "/api",
@@ -21,6 +23,12 @@ request.interceptors.response.use(
     return result.data;
   },
   (error) => {
+    if (error.response.status === 401) {
+      ElMessage.error('登录失效，请重新登录');
+      router.push('/login');
+    } else {
+      ElMessage.error('接口访问异常');
+    }
     return Promise.reject(error);
   },
 );
