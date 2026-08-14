@@ -115,14 +115,14 @@ public class EmpServiceImpl implements EmpService {
     public LoginInfo login(Emp emp) {
 
         Emp e = empMapper.getByUsernameAndPassword(emp.getUsername(), emp.getPassword());
+        if (e == null) {
+            return null;
+        }
         Map<String, Object> claims = new HashMap<>();
         claims.put("id", e.getId());
         claims.put("username", e.getUsername());
         long expiration = 60 * 60 * 1000;
         String token = JwtUtil.generateToken(claims, expiration);
-        if (e == null) {
-            return null;
-        }
         return new LoginInfo(e.getId(), e.getUsername(), e.getName(), token);
     }
 
