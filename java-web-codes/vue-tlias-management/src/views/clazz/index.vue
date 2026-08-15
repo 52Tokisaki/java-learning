@@ -1,7 +1,7 @@
 <script setup>
 
 
-import { ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import { getClazzList } from "@/api/clazz";
 
 const searchClazz = ref({
@@ -49,6 +49,29 @@ const search = async () => {
   }
 };
 
+const clear = () => {
+  searchClazz.value = {
+    name: '',
+    begin: '',
+    end: '',
+    date: [],
+    page: 1,
+    pageSize: 10
+  };
+  search();
+};
+
+const handleEdit = (id) => {
+
+};
+
+const handleDelete = (id) => {
+
+};
+
+onMounted(() => {
+  search();
+});
 
 </script>
 
@@ -77,6 +100,23 @@ const search = async () => {
     </el-form-item>
   </el-form>
 
+  <!-- 表格 -->
+  <el-table :data="clazzList" border style="width: 100%" @selection-change="handleSelectionChange">
+    <el-table-column type="selection" width="55" align="center"></el-table-column>
+    <el-table-column prop="name" label="班级名称" width="120" align="center"></el-table-column>
+    <el-table-column prop="room" label="班级教室" width="120" align="center"></el-table-column>
+    <el-table-column prop="masterName" label="班主任" width="120" align="center"></el-table-column>
+    <el-table-column prop="beginDate" label="开课时间" width="210" align="center"></el-table-column>
+    <el-table-column prop="endDate" label="结课时间" width="210" align="center"></el-table-column>
+    <el-table-column prop="status" label="状态" width="210" align="center"></el-table-column>
+    <el-table-column prop="updateTime" label="最后修改时间" width="210" align="center"></el-table-column>
+    <el-table-column label="操作" fixed="right" align="center">
+      <template #default="scope">
+        <el-button size="small" type="primary" @click="handleEdit(scope.row.id)">编辑</el-button>
+        <el-button size="small" type="danger" @click="handleDelete(scope.row.id)">删除</el-button>
+      </template>
+    </el-table-column>
+  </el-table>
 
   <!-- 分页 -->
   <el-pagination
