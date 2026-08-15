@@ -14,13 +14,17 @@ import {
 } from "@element-plus/icons-vue";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
-import { ElMessageBox } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const username = ref("");
 const router = useRouter();
 
 onMounted(() => {
   const loginUser = JSON.parse(localStorage.getItem("loginUser"));
+  if (!loginUser) {
+    ElMessage.error('登录失效，请重新登录');
+    router.push("/login");
+  }
   username.value = loginUser.username;
 });
 
