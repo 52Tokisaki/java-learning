@@ -42,6 +42,16 @@ const handleCurrentChange = (val) => {
 
 const clazzList = ref([]);
 
+const getClazzStatus = row => {
+  if (new Date(row.beginDate) <= new Date() && new Date(row.endDate) >= new Date()) {
+    return '已开班';
+  } else if (new Date(row.beginDate) > new Date()) {
+    return '未开班';
+  } else {
+    return '已结课';
+  }
+};
+
 const search = async () => {
   const result = await getClazzList(searchClazz.value);
   if (result.code) {
@@ -179,7 +189,12 @@ onMounted(() => {
     <el-table-column prop="masterName" label="班主任" width="120" align="center"></el-table-column>
     <el-table-column prop="beginDate" label="开课时间" width="210" align="center"></el-table-column>
     <el-table-column prop="endDate" label="结课时间" width="210" align="center"></el-table-column>
-    <el-table-column prop="status" label="状态" width="210" align="center"></el-table-column>
+    <el-table-column prop="status" label="状态" width="210" align="center">
+    <!--  状态映射：状态 （未开班、已开班、已结课） 判断当前时间是否在开课时间和结课时间之间   -->
+      <template #default="scope">
+        {{ getClazzStatus(scope.row) }}
+      </template>
+    </el-table-column>
     <el-table-column prop="updateTime" label="最后修改时间" width="210" align="center"></el-table-column>
     <el-table-column label="操作" fixed="right" align="center">
       <template #default="scope">
