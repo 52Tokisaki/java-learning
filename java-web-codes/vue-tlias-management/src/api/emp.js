@@ -20,3 +20,6 @@ export const getEmpDetailById = (id) => request.get(`/emps/${id}`);
 export const updateEmp = (emp) => request.put('/emps', emp);
 
 export const deleteEmp = (ids) => request.delete('/emps', { params: { ids } });
+
+// /emps/list 查询全部员工
+export const getAllEmpList = () => request.get('/emps/list');

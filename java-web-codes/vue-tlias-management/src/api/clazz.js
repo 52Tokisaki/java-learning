@@ -10,3 +10,5 @@ export const getClazzList = (params) => request.get('/clazzs', {
     pageSize: params.pageSize,
   },
 });
+
+export const insertClazz = (clazz) => request.post('/clazzs', clazz);

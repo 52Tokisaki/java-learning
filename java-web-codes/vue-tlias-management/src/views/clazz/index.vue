@@ -2,7 +2,9 @@
 
 
 import { onMounted, ref, watch } from "vue";
-import { getClazzList } from "@/api/clazz";
+import { getClazzList, insertClazz } from "@/api/clazz";
+import { getAllEmpList } from "@/api/emp";
+import { ElMessage } from "element-plus";
 
 const searchClazz = ref({
   name: '',
@@ -69,8 +71,73 @@ const handleDelete = (id) => {
 
 };
 
+const showDialog = ref(false);
+const dialogTitle = ref('');
+const clazzForm = ref({ name: '', room: '', beginDate: '', endDate: '', masterName: '', subject: '' });
+// 班级名称、开课、结课时间、学科必填
+const rules = ref({
+  name: [
+    { required: true, message: '请输入班级名称', trigger: 'blur' },
+    { min: 2, max: 10, message: '长度在 2 到 10 个字符', trigger: 'blur' }
+  ],
+  beginDate: [
+    { required: true, message: '请选择开课时间', trigger: 'change' }
+  ],
+  endDate: [
+    { required: true, message: '请选择结课时间', trigger: 'change' }
+  ],
+  subject: [
+    { required: true, message: '请选择学科', trigger: 'change' }
+  ]
+});
+const formRef = ref(null);
+
+const masterMap = ref([]);
+// 学科, 1:java, 2:前端, 3:大数据, 4:Python, 5:Go, 6:嵌入式
+const subjectMap = ref([ { value: 1, label: 'Java' }, { value: 2, label: '前端' }, { value: 3, label: '大数据' }, { value: 4, label: 'Python' }, { value: 5, label: 'Go' }, { value: 6, label: '嵌入式' } ])
+const addClazz = () => {
+  showDialog.value = true;
+  clazzForm.value = { name: '', room: '', beginDate: '', endDate: '', masterName: '', subject: '' };
+  dialogTitle.value = '新增班级';
+};
+
+const getMasterList = async () => {
+  const result = await getAllEmpList();
+  if (result.code) {
+    console.log(result)
+    masterMap.value = result.data.map(item => ({
+      value: item.id,
+      label: item.name
+    }));
+  }
+};
+
+const onSubmit = () => {
+  formRef.value.validate(async (valid) => {
+    if (valid) {
+      let result;
+      if (dialogTitle.value === '新增班级') {
+        result = await insertClazz(clazzForm.value);
+      } else {
+        result = await updateClazz(clazzForm.value);
+      }
+      if (result.code) {
+        ElMessage.success('保存成功');
+        showDialog.value = false;
+        await search();
+      } else {
+        ElMessage.error('保存失败');
+      }
+    } else {
+      ElMessage.error('请填写必填项');
+      return false;
+    }
+  });
+};
+
 onMounted(() => {
   search();
+  getMasterList();
 });
 
 </script>
@@ -79,7 +146,7 @@ onMounted(() => {
   <h1>班级管理</h1>
 
   <el-form :inline="true" :model="searchClazz">
-    <el-form-item label="班级鸣潮">
+    <el-form-item label="班级名称">
       <el-input v-model="searchClazz.name" placeholder="请输入员工姓名"></el-input>
     </el-form-item>
 
@@ -99,6 +166,10 @@ onMounted(() => {
       <el-button @click="clear">清空</el-button>
     </el-form-item>
   </el-form>
+
+  <div style="margin: 20px 0">
+    <el-button type="primary" @click="addClazz">新增班级</el-button>
+  </div>
 
   <!-- 表格 -->
   <el-table :data="clazzList" border style="width: 100%" @selection-change="handleSelectionChange">
@@ -129,6 +200,40 @@ onMounted(() => {
     :total="total"
   >
   </el-pagination>
+
+  <el-dialog v-model="showDialog" :title="dialogTitle">
+    <el-form :model="clazzForm" :rules="rules" ref="formRef" label-width="100px">
+      <el-form-item label="班级名称" prop="name">
+        <el-input v-model="clazzForm.name" />
+      </el-form-item>
+      <el-form-item label="班级教室" prop="room">
+        <el-input v-model="clazzForm.room" />
+      </el-form-item>
+      <el-form-item label="开课时间" prop="beginDate">
+        <el-date-picker v-model="clazzForm.beginDate" type="date" placeholder="选择日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
+      </el-form-item>
+      <el-form-item label="结课时间" prop="endDate">
+        <el-date-picker v-model="clazzForm.endDate" type="date" placeholder="选择日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
+      </el-form-item>
+      <el-form-item label="班主任" prop="masterName">
+        <el-select v-model="clazzForm.masterName" placeholder="请选择班主任">
+          <el-option v-for="item in masterMap" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="学科" prop="subject">
+        <el-select v-model="clazzForm.subject" placeholder="请选择学科">
+          <el-option v-for="item in subjectMap" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
+      </el-form-item>
+    </el-form>
+
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showDialog = false">取消</el-button>
+        <el-button type="primary" @click="onSubmit"> 确认 </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
 
 <style scoped>
