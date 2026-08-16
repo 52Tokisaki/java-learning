@@ -73,7 +73,7 @@ const handleDelete = (id) => {
 
 const showDialog = ref(false);
 const dialogTitle = ref('');
-const clazzForm = ref({ name: '', room: '', beginDate: '', endDate: '', masterName: '', subject: '' });
+const clazzForm = ref({ name: '', room: '', beginDate: '', endDate: '', masterId: null, subject: null });
 // 班级名称、开课、结课时间、学科必填
 const rules = ref({
   name: [
@@ -215,8 +215,8 @@ onMounted(() => {
       <el-form-item label="结课时间" prop="endDate">
         <el-date-picker v-model="clazzForm.endDate" type="date" placeholder="选择日期" format="YYYY-MM-DD" value-format="YYYY-MM-DD" />
       </el-form-item>
-      <el-form-item label="班主任" prop="masterName">
-        <el-select v-model="clazzForm.masterName" placeholder="请选择班主任">
+      <el-form-item label="班主任" prop="masterId">
+        <el-select v-model="clazzForm.masterId" placeholder="请选择班主任">
           <el-option v-for="item in masterMap" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
       </el-form-item>
