@@ -12,3 +12,8 @@ export const getClazzList = (params) => request.get('/clazzs', {
 });
 
 export const insertClazz = (clazz) => request.post('/clazzs', clazz);
+
+export const getClazzById = id => request.get(`/clazzs/${id}`);
+
+export const updateClazz = clazz => request.put('/clazzs', clazz);
+

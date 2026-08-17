@@ -2,7 +2,7 @@
 
 
 import { onMounted, ref, watch } from "vue";
-import { getClazzList, insertClazz } from "@/api/clazz";
+import { getClazzById, getClazzList, insertClazz, updateClazz } from "@/api/clazz";
 import { getAllEmpList } from "@/api/emp";
 import { ElMessage } from "element-plus";
 
@@ -73,8 +73,13 @@ const clear = () => {
   search();
 };
 
-const handleEdit = (id) => {
-
+const handleEdit = async (id) => {
+  const result = await getClazzById(id);
+  if (result.code) {
+    clazzForm.value = result.data;
+  }
+  showDialog.value = true;
+  dialogTitle.value = '编辑班级';
 };
 
 const handleDelete = (id) => {
