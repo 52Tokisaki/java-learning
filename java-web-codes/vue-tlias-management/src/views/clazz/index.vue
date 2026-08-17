@@ -2,9 +2,9 @@
 
 
 import { onMounted, ref, watch } from "vue";
-import { getClazzById, getClazzList, insertClazz, updateClazz } from "@/api/clazz";
+import { deleteClazz, getClazzById, getClazzList, insertClazz, updateClazz } from "@/api/clazz";
 import { getAllEmpList } from "@/api/emp";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const searchClazz = ref({
   name: '',
@@ -83,7 +83,22 @@ const handleEdit = async (id) => {
 };
 
 const handleDelete = (id) => {
-
+  ElMessageBox.confirm("确认要删除该班级吗?", "Warning", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      const result = await deleteClazz(id);
+      if (result.code) {
+        ElMessage({
+          type: "success",
+          message: "删除班级成功",
+        });
+        await search();
+      }
+    })
+    .catch((err) => {console.log(err)});
 };
 
 const showDialog = ref(false);

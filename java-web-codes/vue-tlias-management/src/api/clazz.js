@@ -17,3 +17,4 @@ export const getClazzById = id => request.get(`/clazzs/${id}`);
 
 export const updateClazz = clazz => request.put('/clazzs', clazz);
 
+export const deleteClazz = id => request.delete(`/clazzs/${id}`);
