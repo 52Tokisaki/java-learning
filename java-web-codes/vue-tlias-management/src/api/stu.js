@@ -9,3 +9,6 @@ export const queryStuList = (params) => request.get('/students', {
     pageSize: params.pageSize,
   },
 });
+
+// 新增学员
+export const insertStu = (stu) => request.post(`/students`, stu);
