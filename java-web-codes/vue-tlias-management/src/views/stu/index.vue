@@ -1,9 +1,9 @@
 <script setup>
 
 import { onMounted, ref } from "vue";
-import { getStuById, insertStu, queryStuList, updateStu } from "@/api/stu";
+import { deleteStuBatch, getStuById, insertStu, queryStuList, updateStu } from "@/api/stu";
 import { getAllClazz } from "@/api/clazz";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const searchStu = ref({
   name: '',
@@ -149,12 +149,55 @@ const onSubmit = async () => {
       if (result.code) {
         showDialog.value = false;
         ElMessage.success('操作成功');
-        search();
+        await search();
       }
     } else {
       ElMessage.error('表单验证失败');
     }
   });
+};
+
+const handleDelete = (id) => {
+  ElMessageBox.confirm("确认要删除该学员吗?", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      const result = await deleteStuBatch([id]);
+      if (result.code) {
+        ElMessage({
+          type: "success",
+          message: "删除学员成功",
+        });
+        await search();
+      }
+    })
+    .catch((err) => {console.log(err)});
+};
+
+const selectedIds = ref([]);
+const handleSelectionChange = (val) => {
+  selectedIds.value = val.map(stu => stu.id);
+};
+
+const handleDeleteBatch = async () => {
+  ElMessageBox.confirm("确认要删除所选中的学员吗?", "提示", {
+    confirmButtonText: "确认",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(async () => {
+      const result = await deleteStuBatch(selectedIds.value);
+      if (result.code) {
+        ElMessage({
+          type: "success",
+          message: "删除学员成功",
+        });
+        await search();
+      }
+    })
+    .catch((err) => {console.log(err)});
 };
 
 onMounted(() => {
@@ -190,7 +233,7 @@ onMounted(() => {
 
   <div style="margin: 20px 0">
     <el-button type="primary" @click="addStu">+ 新增学生</el-button>
-    <el-button type="danger" @click="deleteStuBatch">- 批量删除</el-button>
+    <el-button type="danger" @click="handleDeleteBatch">- 批量删除</el-button>
   </div>
 
   <!-- 表格 -->

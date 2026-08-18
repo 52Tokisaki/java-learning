@@ -18,3 +18,5 @@ export const getStuById = id => request.get(`/students/${id}`);
 
 // 更新学员信息
 export const updateStu = (stu) => request.put('students', stu);
+
+export const deleteStuBatch = (ids) => request.delete(`/students/${ids.join(',')}`);
