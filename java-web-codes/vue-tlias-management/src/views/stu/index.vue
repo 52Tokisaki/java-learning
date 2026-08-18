@@ -1,7 +1,7 @@
 <script setup>
 
 import { onMounted, ref } from "vue";
-import { insertStu, queryStuList } from "@/api/stu";
+import { getStuById, insertStu, queryStuList, updateStu } from "@/api/stu";
 import { getAllClazz } from "@/api/clazz";
 import { ElMessage } from "element-plus";
 
@@ -127,6 +127,13 @@ const addStu = () => {
     clazzId: null
   };
   formRef.value.resetFields();
+};
+
+const handleEdit = async (id) => {
+  dialogTitle.value = '编辑学生';
+  showDialog.value = true;
+  const result = await getStuById(id);
+  stuForm.value = result.data;
 };
 
 const onSubmit = async () => {

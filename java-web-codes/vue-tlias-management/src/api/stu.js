@@ -12,3 +12,9 @@ export const queryStuList = (params) => request.get('/students', {
 
 // 新增学员
 export const insertStu = (stu) => request.post(`/students`, stu);
+
+// 根据id查询学员
+export const getStuById = id => request.get(`/students/${id}`);
+
+// 更新学员信息
+export const updateStu = (stu) => request.put('students', stu);
