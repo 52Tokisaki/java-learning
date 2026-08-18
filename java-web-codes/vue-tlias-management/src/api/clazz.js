@@ -18,3 +18,6 @@ export const getClazzById = id => request.get(`/clazzs/${id}`);
 export const updateClazz = clazz => request.put('/clazzs', clazz);
 
 export const deleteClazz = id => request.delete(`/clazzs/${id}`);
+
+// 查询所有班级
+export const getAllClazz = () => request.get('/clazzs/list');
