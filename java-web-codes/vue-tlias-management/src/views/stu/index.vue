@@ -1,7 +1,7 @@
 <script setup>
 
 import { onMounted, ref } from "vue";
-import { deleteStuBatch, getStuById, insertStu, queryStuList, updateStu } from "@/api/stu";
+import { deleteStuBatch, getStuById, insertStu, queryStuList, updateStu, violateStu } from "@/api/stu";
 import { getAllClazz } from "@/api/clazz";
 import { ElMessage, ElMessageBox } from "element-plus";
 
@@ -200,6 +200,38 @@ const handleDeleteBatch = async () => {
     .catch((err) => {console.log(err)});
 };
 
+const showViolationDialog = ref(false);
+const violationForm = ref({
+  id: null,
+  score: null
+});
+const violationRules = {
+  score: [
+    { required: true, message: '请输入违纪扣分', trigger: 'blur' }
+  ]
+};
+const violationFormRef = ref(null);
+const handleViolation = (id) => {
+  violationForm.value.id = id;
+  showViolationDialog.value = true;
+};
+
+const handleViolationSubmit = async () => {
+  violationFormRef.value.validate(async (valid) => {
+    if (valid) {
+      // 表单验证通过，提交表单
+      const result = await violateStu(violationForm.value.id, violationForm.value.score);
+      if (result.code) {
+        showViolationDialog.value = false;
+        ElMessage.success('操作成功');
+        await search();
+      }
+    } else {
+      ElMessage.error('表单验证失败');
+    }
+  });
+};
+
 onMounted(() => {
   search();
   getClazzMap();
@@ -363,6 +395,21 @@ onMounted(() => {
       <div class="dialog-footer">
         <el-button @click="showDialog = false">取消</el-button>
         <el-button type="primary" @click="onSubmit"> 确认 </el-button>
+      </div>
+    </template>
+  </el-dialog>
+
+  <!-- 处理违纪 -->
+  <el-dialog v-model="showViolationDialog" title="处理违纪">
+    <el-form :model="violationForm" :rules="violationRules" ref="violationFormRef" label-width="100">
+      <el-form-item label="违纪扣分" prop="score">
+        <el-input v-model="violationForm.score" />
+      </el-form-item>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="showViolationDialog = false">取消</el-button>
+        <el-button type="primary" @click="handleViolationSubmit"> 确认 </el-button>
       </div>
     </template>
   </el-dialog>

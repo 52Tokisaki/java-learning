@@ -20,3 +20,6 @@ export const getStuById = id => request.get(`/students/${id}`);
 export const updateStu = (stu) => request.put('students', stu);
 
 export const deleteStuBatch = (ids) => request.delete(`/students/${ids.join(',')}`);
+
+// 违纪处理
+export const violateStu = (id, score) => request.put(`/students/violation/${id}/${score}`);
