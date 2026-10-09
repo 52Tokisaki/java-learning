@@ -2,9 +2,9 @@ spring:
   application:
     name: lesama-dept-management
   datasource:
-    url: jdbc:mysql://localhost:3306/lesama01
+    url: jdbc:mysql://192.168.100.128:3306/lesama
     username: root
-    password: admin12345
+    password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
   servlet:
     multipart:
