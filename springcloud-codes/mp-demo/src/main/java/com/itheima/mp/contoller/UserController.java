@@ -2,6 +2,7 @@ package com.itheima.mp.contoller;
 
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.service.IUserService;
 
@@ -65,5 +66,11 @@ public class UserController {
     @ApiOperation("根据id扣减余额")
     public void deductMoneyById(@PathVariable Long id, @PathVariable Integer money) {
         userService.deductMoneyById(id, money);
+    }
+
+    @GetMapping("/list")
+    @ApiOperation("根据复杂条件查询用户")
+    public List<User> queryUsers(UserQuery userQuery) {
+        return userService.queryUsers(userQuery.getUsername(), userQuery.getStatus(), userQuery.getMinBalance(), userQuery.getMaxBalance());
     }
 }
