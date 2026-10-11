@@ -49,10 +49,11 @@ public class UserController {
     @GetMapping("/{id}")
     @ApiOperation("根据id查询用户")
     public UserVO queryById(@PathVariable Long id) {
-        User user = userService.getById(id);
-        UserVO userVO = new UserVO();
-        BeanUtils.copyProperties(user, userVO);
-        return userVO;
+//        User user = userService.getById(id);
+//        UserVO userVO = new UserVO();
+//        BeanUtils.copyProperties(user, userVO);
+//        return userVO;
+        return userService.queryUserAndAddressById(id);
     }
     
     @GetMapping
