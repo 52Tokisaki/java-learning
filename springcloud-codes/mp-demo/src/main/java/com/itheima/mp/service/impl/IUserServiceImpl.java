@@ -92,4 +92,14 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         }
         return userVOS;
     }
+
+    @Override
+    public List<AddressVO> queryUserAddressById(Long id) {
+        User user = getById(id);
+        if (user == null || user.getStatus() == 2) {
+            throw new RuntimeException("用户状态异常");
+        }
+        List<Address> addresses = Db.lambdaQuery(Address.class).eq(Address::getUserId, id).list();
+        return BeanUtil.copyToList(addresses, AddressVO.class);
+    }
 }

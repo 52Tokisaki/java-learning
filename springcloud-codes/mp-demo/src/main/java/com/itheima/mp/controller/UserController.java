@@ -3,6 +3,7 @@ package com.itheima.mp.controller;
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.query.UserQuery;
+import com.itheima.mp.domain.vo.AddressVO;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.service.IUserService;
 
@@ -62,6 +63,12 @@ public class UserController {
 //        List<User> users = userService.listByIds(ids);
 //        return BeanUtil.copyToList(users, UserVO.class);
         return userService.queryUsersByIds(ids);
+    }
+
+    @GetMapping("/address/{id}")
+    @ApiOperation("根据id查询用户地址信息")
+    public List<AddressVO> queryUserAddressById(@PathVariable Long id) {
+        return userService.queryUserAddressById(id);
     }
     
     @PutMapping("/{id}/deduction/{money}")
