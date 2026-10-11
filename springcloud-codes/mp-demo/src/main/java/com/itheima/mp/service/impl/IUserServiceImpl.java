@@ -8,6 +8,7 @@ import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.vo.AddressVO;
 import com.itheima.mp.domain.vo.UserVO;
+import com.itheima.mp.enums.UserStatus;
 import com.itheima.mp.mapper.UserMapper;
 import com.itheima.mp.service.IUserService;
 
@@ -31,7 +32,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     public void deductMoneyById(Long id, Integer money) {
         User user = this.getById(id);
 
-        if (user == null || user.getStatus() == 2) {
+        if (user == null || user.getStatus() == UserStatus.FROZEN) {
             throw new RuntimeException("用户状态非法");
         }
 
@@ -62,7 +63,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     @Override
     public UserVO queryUserAndAddressById(Long id) {
         User user = getById(id);
-        if (user == null || user.getStatus() == 2) {
+        if (user == null || user.getStatus() == UserStatus.FROZEN) {
             throw new RuntimeException("用户状态异常");
         }
         UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
@@ -96,7 +97,7 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     @Override
     public List<AddressVO> queryUserAddressById(Long id) {
         User user = getById(id);
-        if (user == null || user.getStatus() == 2) {
+        if (user == null || user.getStatus() == UserStatus.FROZEN) {
             throw new RuntimeException("用户状态异常");
         }
         List<Address> addresses = Db.lambdaQuery(Address.class).eq(Address::getUserId, id).list();
