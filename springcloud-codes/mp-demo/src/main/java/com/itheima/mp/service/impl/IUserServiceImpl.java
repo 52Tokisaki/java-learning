@@ -1,6 +1,7 @@
 package com.itheima.mp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
 import com.itheima.mp.domain.po.Address;
@@ -14,7 +15,11 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -57,9 +62,34 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     @Override
     public UserVO queryUserAndAddressById(Long id) {
         User user = getById(id);
+        if (user == null || user.getStatus() == 2) {
+            throw new RuntimeException("用户状态异常");
+        }
         UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
         List<Address> addresses = Db.lambdaQuery(Address.class).eq(Address::getUserId, id).list();
         userVO.setAddresses(BeanUtil.copyToList(addresses, AddressVO.class));
         return userVO;
+    }
+
+    @Override
+    public List<UserVO> queryUsersByIds(List<Long> ids) {
+        List<User> users = listByIds(ids);
+        if (CollUtil.isEmpty(users)) {
+            return List.of();
+        }
+
+        List<Address> addresses = Db.lambdaQuery(Address.class).in(Address::getUserId, ids).list();
+        Map<Long, List<Address>> addressMap = new HashMap<>();
+        if (CollUtil.isNotEmpty(addresses)) {
+            addressMap = addresses.stream().collect(Collectors.groupingBy(Address::getUserId)); // 根据用户id分组
+        }
+
+        List<UserVO> userVOS = new ArrayList<>(users.size());
+        for (User user : users) {
+            UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+            userVO.setAddresses(BeanUtil.copyToList(addressMap.get(user.getId()), AddressVO.class));
+            userVOS.add(userVO);
+        }
+        return userVOS;
     }
 }

@@ -59,8 +59,9 @@ public class UserController {
     @GetMapping
     @ApiOperation("根据id批量查询")
     public List<UserVO> queryUsers(@RequestParam("ids") List<Long> ids) {
-        List<User> users = userService.listByIds(ids);
-        return BeanUtil.copyToList(users, UserVO.class); 
+//        List<User> users = userService.listByIds(ids);
+//        return BeanUtil.copyToList(users, UserVO.class);
+        return userService.queryUsersByIds(ids);
     }
     
     @PutMapping("/{id}/deduction/{money}")
