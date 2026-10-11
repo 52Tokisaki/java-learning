@@ -1,4 +1,4 @@
-package com.itheima.mp.contoller;
+package com.itheima.mp.controller;
 
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
