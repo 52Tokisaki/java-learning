@@ -1,5 +1,6 @@
 package com.itheima.mp.controller;
 
+import com.itheima.mp.domain.dto.PageDTO;
 import com.itheima.mp.domain.dto.UserFormDTO;
 import com.itheima.mp.domain.po.User;
 import com.itheima.mp.domain.query.UserQuery;
@@ -81,5 +82,11 @@ public class UserController {
     @ApiOperation("根据复杂条件查询用户")
     public List<User> queryUsers(UserQuery userQuery) {
         return userService.queryUsers(userQuery.getUsername(), userQuery.getStatus(), userQuery.getMinBalance(), userQuery.getMaxBalance());
+    }
+
+    @GetMapping("/page")
+    @ApiOperation("根据复杂条件分页查询用户")
+    public PageDTO<UserVO> queryUsersPage(UserQuery userQuery) {
+        return userService.queryUsersPage(userQuery);
     }
 }

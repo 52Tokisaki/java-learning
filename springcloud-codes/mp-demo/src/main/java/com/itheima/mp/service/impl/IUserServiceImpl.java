@@ -2,10 +2,15 @@ package com.itheima.mp.service.impl;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.baomidou.mybatisplus.extension.toolkit.Db;
+import com.itheima.mp.domain.dto.PageDTO;
 import com.itheima.mp.domain.po.Address;
 import com.itheima.mp.domain.po.User;
+import com.itheima.mp.domain.query.UserQuery;
 import com.itheima.mp.domain.vo.AddressVO;
 import com.itheima.mp.domain.vo.UserVO;
 import com.itheima.mp.enums.UserStatus;
@@ -102,5 +107,27 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         }
         List<Address> addresses = Db.lambdaQuery(Address.class).eq(Address::getUserId, id).list();
         return BeanUtil.copyToList(addresses, AddressVO.class);
+    }
+
+    @Override
+    public PageDTO<UserVO> queryUsersPage(UserQuery userQuery) {
+        String username = userQuery.getUsername();
+        Integer status = userQuery.getStatus();
+        Integer minBalance = userQuery.getMinBalance();
+        Integer maxBalance = userQuery.getMaxBalance();
+        String sortBy = userQuery.getSortBy();
+        Boolean isAsc = userQuery.getIsAsc();
+        Page<User> page = Page.of(userQuery.getPageNo(), userQuery.getPageSize());
+        if (StrUtil.isNotBlank(sortBy)) {
+            page.addOrder(new OrderItem(sortBy, isAsc));
+        } else {
+            page.addOrder(new OrderItem("update_time", false));
+        }
+        Page<User> p = lambdaQuery().like(username != null, User::getUsername, username)
+                .eq(status != null, User::getStatus, status)
+                .ge(minBalance != null, User::getBalance, minBalance)
+                .le(maxBalance != null, User::getBalance, maxBalance)
+                .page(page);
+        return new PageDTO<>(p.getTotal(), p.getPages(), BeanUtil.copyToList(p.getRecords(), UserVO.class));
     }
 }
