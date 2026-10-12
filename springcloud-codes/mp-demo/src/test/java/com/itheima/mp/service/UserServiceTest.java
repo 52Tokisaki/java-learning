@@ -2,6 +2,7 @@ package com.itheima.mp.service;
 
 import com.itheima.mp.domain.po.User;
 
+import com.itheima.mp.domain.po.UserInfo;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +24,8 @@ public class UserServiceTest {
         user.setPassword("123");
         user.setPhone("18688990321");
         user.setBalance(200);
-        user.setInfo("{\"age\": 24, \"intro\": \"金发精灵\", \"gender\": \"female\"}");
+//        user.setInfo("{\"age\": 24, \"intro\": \"金发精灵\", \"gender\": \"female\"}");
+        user.setInfo(UserInfo.of(24, "金发精灵", "female"));
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(LocalDateTime.now());
         userService.save(user);
@@ -45,7 +47,8 @@ public class UserServiceTest {
         user.setPassword("123");
         user.setPhone("" + (18688190000L + i));
         user.setBalance(2000);
-        user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
+//        user.setInfo("{\"age\": 24, \"intro\": \"英文老师\", \"gender\": \"female\"}");
+        user.setInfo(UserInfo.of(24, "金发精灵", "female"));
         user.setCreateTime(LocalDateTime.now());
         user.setUpdateTime(user.getCreateTime());
         return user;
