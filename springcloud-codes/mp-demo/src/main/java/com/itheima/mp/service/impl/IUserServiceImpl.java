@@ -117,17 +117,20 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
         Integer maxBalance = userQuery.getMaxBalance();
         String sortBy = userQuery.getSortBy();
         Boolean isAsc = userQuery.getIsAsc();
-        Page<User> page = Page.of(userQuery.getPageNo(), userQuery.getPageSize());
-        if (StrUtil.isNotBlank(sortBy)) {
-            page.addOrder(new OrderItem(sortBy, isAsc));
-        } else {
-            page.addOrder(new OrderItem("update_time", false));
-        }
+        Page<User> page = userQuery.toMpPageDefaultUpdateTime();
         Page<User> p = lambdaQuery().like(username != null, User::getUsername, username)
                 .eq(status != null, User::getStatus, status)
                 .ge(minBalance != null, User::getBalance, minBalance)
                 .le(maxBalance != null, User::getBalance, maxBalance)
                 .page(page);
-        return new PageDTO<>(p.getTotal(), p.getPages(), BeanUtil.copyToList(p.getRecords(), UserVO.class));
+        // return PageDTO.of(p, UserVO.class);
+        return PageDTO.of(p, user -> {
+            // 处理基本属性
+            UserVO userVO = BeanUtil.copyProperties(user, UserVO.class);
+            // 处理特殊逻辑
+            userVO.setUsername(userVO.getUsername().substring(0, userVO.getUsername().length() - 2) + "**");
+            // 将处理结果返回
+            return userVO;
+        });
     }
 }
