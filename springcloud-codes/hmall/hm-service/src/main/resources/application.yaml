@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 4848
 spring:
   application:
     name: hm-service
