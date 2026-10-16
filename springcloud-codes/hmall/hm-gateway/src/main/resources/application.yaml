@@ -28,3 +28,5 @@ spring:
           uri: lb://user-service
           predicates:
             - Path=/users/**, /addresses/**
+      default-filters:
+        - PrintAny
