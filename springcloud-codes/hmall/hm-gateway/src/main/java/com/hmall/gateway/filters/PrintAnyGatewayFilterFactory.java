@@ -1,5 +1,6 @@
 package com.hmall.gateway.filters;
 
+import lombok.Data;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.OrderedGatewayFilter;
@@ -8,15 +9,37 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Component
-public class PrintAnyGatewayFilterFactory extends AbstractGatewayFilterFactory<Object> {
+public class PrintAnyGatewayFilterFactory extends AbstractGatewayFilterFactory<PrintAnyGatewayFilterFactory.Config> {
     @Override
-    public GatewayFilter apply(Object config) {
+    public GatewayFilter apply(Config config) {
         return new OrderedGatewayFilter(
                 (exchange, chain) -> {
+                    String a = config.getA();
+                    String b = config.getB();
+                    String c = config.getC();
+                    System.out.println("a: " + a + ", b: " + b + ", c: " + c);
                     System.out.println("Print Any Filter Executed");
                     return chain.filter(exchange);
                 }, 1
         );
+    }
+
+    @Data
+    public static class Config {
+        private String a;
+        private String b;
+        private String c;
+    }
+
+    public PrintAnyGatewayFilterFactory() {
+        super(Config.class);
+    }
+
+    @Override
+    public List<String> shortcutFieldOrder() {
+        return List.of("a", "b", "c");
     }
 }

@@ -29,4 +29,4 @@ spring:
           predicates:
             - Path=/users/**, /addresses/**
       default-filters:
-        - PrintAny
+        - PrintAny=1,2,3
