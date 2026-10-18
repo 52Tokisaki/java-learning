@@ -46,12 +46,15 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         } catch (Exception e) {
             ServerHttpResponse response = exchange.getResponse();
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            response.setComplete(); // 设置完成，返回响应
+            return response.setComplete(); // 设置完成，返回响应
         }
         // 将用户id传递下去
-        System.out.println("userId: " + userId);
-        // 放行
-        return chain.filter(exchange);
+        String userInfo = userId.toString();
+        ServerWebExchange swe = exchange.mutate()
+                .request(builder -> builder.header("user-info", userInfo).build())
+                .build();
+        // 放行, 将携带了用户信息的请求放行下去
+        return chain.filter(swe);
     }
 
     private boolean isExclude(String path) {
