@@ -10,6 +10,6 @@ import java.util.Collection;
 @FeignClient("cart-service")
 public interface CartClient {
     @ApiOperation("批量删除购物车中商品")
-    @DeleteMapping("/cart")
+    @DeleteMapping("/carts")
     void deleteCartItemByIds(@RequestParam("ids") Collection<Long> ids);
 }
