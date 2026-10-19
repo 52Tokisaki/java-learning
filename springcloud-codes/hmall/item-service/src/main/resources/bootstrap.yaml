@@ -13,9 +13,3 @@ spring:
           - data-id: shared-log.yaml # 共享日志配置
           - data-id: shared-swagger.yaml # 共享接口文档配置
           - data-id: shared-seata.yaml # 共享seata配置
-hm:
-  swagger:
-    title: 商品服务接口文档
-    package: com.hmall.item.controller
-  db:
-    database: hm-item
