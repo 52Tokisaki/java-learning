@@ -1,5 +1,6 @@
 package com.hmall.api.client;
 
+import com.hmall.api.client.fallback.ItemClientFallback;
 import com.hmall.api.dto.ItemDTO;
 import com.hmall.api.dto.OrderDetailDTO;
 import io.swagger.annotations.ApiOperation;
@@ -9,7 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Collection;
 import java.util.List;
 
-@FeignClient("item-service")
+// 使用对应的降级逻辑
+@FeignClient(value = "item-service", fallbackFactory = ItemClientFallback.class)
 public interface ItemClient {
 
     @ApiOperation("根据ids查询商品")
