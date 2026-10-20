@@ -34,4 +34,12 @@ class PublisherApplicationTest {
         String msg = "hello fanout";
         rabbitTemplate.convertAndSend(exchangeName, "", msg);
     }
+
+    @Test
+    public void testDirectExchange() {
+        String exchangeName = "hmall.direct";
+        String routingKey = "yellow";
+        String msg = "hello direct yellow";
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, msg);
+    }
 }
