@@ -18,4 +18,13 @@ class PublisherApplicationTest {
         String msg = "hello world";
         rabbitTemplate.convertAndSend(queueName, msg);
     }
+
+    @Test
+    public void testWorkQueues() {
+        String queueName = "work.queue";
+        String msg = "hello msg_";
+        for (int i = 0; i < 50; i++) {
+            rabbitTemplate.convertAndSend(queueName, msg + i);
+        }
+    }
 }

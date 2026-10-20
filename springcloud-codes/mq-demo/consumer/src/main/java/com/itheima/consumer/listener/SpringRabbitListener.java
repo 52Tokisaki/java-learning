@@ -12,4 +12,13 @@ public class SpringRabbitListener {
     public void listenSimpleQueueMessage(String msg) {
         log.info("Spring 消费者接收到消息: {}", msg);
     }
+
+    @RabbitListener(queues = {"work.queue"})
+    public void listenWorkQueueMessage1(String msg) {
+        log.info("Spring 消费者1接收到消息: {}", msg);
+    }
+    @RabbitListener(queues = {"work.queue"})
+    public void listenWorkQueueMessage2(String msg) {
+        log.info("Spring 消费者2接收到消息: {}", msg);
+    }
 }
