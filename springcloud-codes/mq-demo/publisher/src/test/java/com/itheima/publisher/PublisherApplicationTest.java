@@ -27,4 +27,11 @@ class PublisherApplicationTest {
             rabbitTemplate.convertAndSend(queueName, msg + i);
         }
     }
+
+    @Test
+    public void testFanoutExchange() {
+        String exchangeName = "hmall.fanout";
+        String msg = "hello fanout";
+        rabbitTemplate.convertAndSend(exchangeName, "", msg);
+    }
 }
