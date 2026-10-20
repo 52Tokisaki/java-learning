@@ -42,4 +42,12 @@ class PublisherApplicationTest {
         String msg = "hello direct yellow";
         rabbitTemplate.convertAndSend(exchangeName, routingKey, msg);
     }
+
+    @Test
+    public void testTopicExchange() {
+        String exchangeName = "hmall.topic";
+        String routingKey = "china.#";
+        String msg = "hello topic china.news";
+        rabbitTemplate.convertAndSend(exchangeName, routingKey, msg);
+    }
 }
