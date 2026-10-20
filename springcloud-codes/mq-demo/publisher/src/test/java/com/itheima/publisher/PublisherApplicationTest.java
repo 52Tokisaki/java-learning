@@ -5,6 +5,9 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -49,5 +52,15 @@ class PublisherApplicationTest {
         String routingKey = "china.#";
         String msg = "hello topic china.news";
         rabbitTemplate.convertAndSend(exchangeName, routingKey, msg);
+    }
+
+    @Test
+    public void testSendMap() throws InterruptedException {
+        // 准备消息
+        Map<String,Object> msg = new HashMap<>();
+        msg.put("name", "鸡你太美");
+        msg.put("age", 21);
+        // 发送消息
+        rabbitTemplate.convertAndSend("object.queue", msg);
     }
 }
