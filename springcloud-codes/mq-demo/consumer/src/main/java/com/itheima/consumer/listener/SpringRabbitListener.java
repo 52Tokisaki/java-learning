@@ -14,11 +14,13 @@ public class SpringRabbitListener {
     }
 
     @RabbitListener(queues = {"work.queue"})
-    public void listenWorkQueueMessage1(String msg) {
+    public void listenWorkQueueMessage1(String msg) throws InterruptedException {
         log.info("Spring 消费者1接收到消息: {}", msg);
+        Thread.sleep(20);
     }
     @RabbitListener(queues = {"work.queue"})
-    public void listenWorkQueueMessage2(String msg) {
+    public void listenWorkQueueMessage2(String msg) throws InterruptedException {
         log.info("Spring 消费者2接收到消息: {}", msg);
+        Thread.sleep(200);
     }
 }
