@@ -92,4 +92,14 @@ public class SpringRabbitListener {
     public void listenDlxQueue(String msg) {
         System.out.println("接收到死信交换机发送的消息" + msg + LocalDateTime.now());
     }
+
+    // 延迟插件实现延迟消息
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("delay.queue"),
+            exchange = @Exchange(name = "delay.direct", delayed = "true"),
+            key = {"delay"}
+    ))
+    public void listenDelayQueue(String msg) {
+        System.out.println("接收到delay延迟消息： " + msg);
+    }
 }

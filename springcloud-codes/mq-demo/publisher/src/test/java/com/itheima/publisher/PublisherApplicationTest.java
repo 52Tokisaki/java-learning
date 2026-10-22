@@ -127,4 +127,12 @@ class PublisherApplicationTest {
             return message;
         });
     }
+
+    @Test
+    public void testSendDelayMsg2() {
+        rabbitTemplate.convertAndSend("delay.direct", "delay", "delay", message -> {
+            message.getMessageProperties().setDelay(10000);
+            return message;
+        });
+    }
 }
