@@ -70,7 +70,7 @@ public class PayOrderServiceImpl extends ServiceImpl<PayOrderMapper, PayOrder> i
         order.setStatus(2);
         order.setPayTime(LocalDateTime.now());
         tradeClient.markOrderPaySuccess(order.getId());*/
-        rabbitTemplate.convertAndSend("pay.direct", "pay.success", po.getBizOrderNo());
+//        rabbitTemplate.convertAndSend("pay.direct", "pay.success", po.getBizOrderNo());
     }
 
     public boolean markPayOrderSuccess(Long id, LocalDateTime successTime) {

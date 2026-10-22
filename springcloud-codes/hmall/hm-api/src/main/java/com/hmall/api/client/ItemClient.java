@@ -22,4 +22,8 @@ public interface ItemClient {
     @ApiOperation("批量扣减库存")
     @PutMapping("/items/stock/deduct")
     void deductStock(@RequestBody List<OrderDetailDTO> detailDTOS);
+
+    @ApiOperation("批量恢复库存")
+    @PostMapping("/items/stock/restore")
+    void restoreStock(@RequestBody List<OrderDetailDTO> details);
 }

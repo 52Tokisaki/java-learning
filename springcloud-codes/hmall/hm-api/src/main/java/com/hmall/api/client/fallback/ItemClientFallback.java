@@ -27,6 +27,12 @@ public class ItemClientFallback implements FallbackFactory {
                 // 库存扣减业务需要触发事务回滚，查询失败，抛出异常
                 throw new BizIllegalException(cause);
             }
+
+            @Override
+            public void restoreStock(List<OrderDetailDTO> detailDTOS) {
+                // 库存恢复业务需要触发事务回滚，查询失败，抛出异常
+                throw new BizIllegalException(cause);
+            }
         };
     }
 }
