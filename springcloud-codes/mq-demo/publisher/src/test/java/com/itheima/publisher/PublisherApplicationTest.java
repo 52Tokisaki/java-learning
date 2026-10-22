@@ -111,4 +111,12 @@ class PublisherApplicationTest {
             });
         }
     }
+
+    // lazyQueue 不写内存，直接入磁盘，并发性更好
+    @Test
+    public void testLazyQueue() {
+        for (int i = 0; i < 1000000; i++) {
+            rabbitTemplate.convertAndSend("lazy.queue", "hello lazy.queue");
+        }
+    }
 }
