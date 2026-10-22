@@ -8,6 +8,7 @@ import org.springframework.amqp.rabbit.annotation.QueueBinding;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 @Slf4j
@@ -81,5 +82,14 @@ public class SpringRabbitListener {
     @RabbitListener(queues = "object.queue")
     public void listenSimpleQueueMessage(Map<String, Object> msg) throws InterruptedException {
         System.out.println("消费者接收到object.queue消息：【" + msg + "】");
+    }
+
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue("dlx.queue"),
+            exchange = @Exchange(name = "dlx.direct", type = ExchangeTypes.DIRECT, delayed = "true"),
+            key = {"hi"}
+    ))
+    public void listenDlxQueue(String msg) {
+        System.out.println("接收到死信交换机发送的消息" + msg + LocalDateTime.now());
     }
 }

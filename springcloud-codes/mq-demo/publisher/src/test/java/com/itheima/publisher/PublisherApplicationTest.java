@@ -119,4 +119,12 @@ class PublisherApplicationTest {
             rabbitTemplate.convertAndSend("lazy.queue", "hello lazy.queue");
         }
     }
+
+    @Test
+    public void testSendDelayMsg() {
+        rabbitTemplate.convertAndSend("normal.direct", "hi", "这是一条延迟消息", message -> {
+            message.getMessageProperties().setExpiration("10000"); // 设置过期时间
+            return message;
+        });
+    }
 }
