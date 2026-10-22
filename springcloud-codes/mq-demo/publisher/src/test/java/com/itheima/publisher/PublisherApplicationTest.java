@@ -2,6 +2,9 @@ package com.itheima.publisher;
 
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import org.springframework.amqp.core.Message;
+import org.springframework.amqp.core.MessageBuilder;
+import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.lang.Nullable;
 import org.springframework.util.concurrent.ListenableFutureCallback;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -93,5 +97,18 @@ class PublisherApplicationTest {
         String msg = "hello direct yellow";
         rabbitTemplate.convertAndSend(exchangeName, routingKey, msg, cd);
         Thread.sleep(100000);
+    }
+
+    // 测试消息是否持久化对MQ可靠性及性能的影响
+    @Test
+    public void testSendMessageWithPersistent() {
+        String queueName = "simple.queue";
+        String msg = "hello world";
+        for (int i = 0; i < 100000; i++) {
+            rabbitTemplate.convertAndSend(queueName, msg, message -> {
+                message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                return message;
+            });
+        }
     }
 }
