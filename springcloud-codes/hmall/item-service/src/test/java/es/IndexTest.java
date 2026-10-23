@@ -6,6 +6,7 @@ import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.GetIndexRequest;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,14 @@ public class IndexTest {
         request.source(MAPPING_TEMPLATE, XContentType.JSON);
         // 3. 发送请求
         client.indices().create(request, RequestOptions.DEFAULT);
+    }
+
+    @Test
+    void testExistIndex() throws IOException {
+        // 1. 创建request对象
+        GetIndexRequest request = new GetIndexRequest("items");
+        boolean exists = client.indices().exists(request, RequestOptions.DEFAULT);
+        System.out.println(exists ? "items索引库已存在" : "items索引库不存在");
     }
 
     @Test
