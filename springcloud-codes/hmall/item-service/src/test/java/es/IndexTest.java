@@ -1,6 +1,7 @@
 package es;
 
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -29,6 +30,14 @@ public class IndexTest {
         request.source(MAPPING_TEMPLATE, XContentType.JSON);
         // 3. 发送请求
         client.indices().create(request, RequestOptions.DEFAULT);
+    }
+
+    @Test
+    void testDelete() throws IOException {
+        // 1. 创建request对象
+        DeleteIndexRequest request = new DeleteIndexRequest("items");
+        // 2. 发送请求
+        client.indices().delete(request, RequestOptions.DEFAULT);
     }
 
     @BeforeEach
