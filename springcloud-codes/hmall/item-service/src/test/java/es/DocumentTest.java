@@ -7,6 +7,8 @@ import com.hmall.item.domain.po.Item;
 import com.hmall.item.service.IItemService;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.delete.DeleteRequest;
+import org.elasticsearch.action.get.GetRequest;
+import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
@@ -43,6 +45,15 @@ public class DocumentTest {
     void testDeleteDoc() throws IOException {
         DeleteRequest request = new DeleteRequest("items").id("317578");
         client.delete(request, RequestOptions.DEFAULT);
+    }
+
+    @Test
+    void testGetDoc() throws IOException {
+        GetRequest request = new GetRequest("items").id("317578");
+        GetResponse response = client.get(request, RequestOptions.DEFAULT);
+        String json = response.getSourceAsString();
+        ItemDoc itemDoc = JSONUtil.toBean(json, ItemDoc.class);
+        System.out.println(itemDoc);
     }
 
     @BeforeEach
