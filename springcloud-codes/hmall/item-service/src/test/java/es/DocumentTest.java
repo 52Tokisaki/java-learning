@@ -1,0 +1,52 @@
+package es;
+
+import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.json.JSONUtil;
+import com.hmall.item.domain.dto.ItemDoc;
+import com.hmall.item.domain.po.Item;
+import com.hmall.item.service.IItemService;
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentType;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.io.IOException;
+
+@SpringBootTest(classes = com.hmall.item.ItemApplication.class)
+public class DocumentTest {
+    @Autowired
+    private IItemService itemService;
+    private RestHighLevelClient client;
+
+
+    @Test
+    void testAddDoc() throws IOException {
+        Item item = itemService.getById(317578L);
+        ItemDoc itemDoc = BeanUtil.copyProperties(item, ItemDoc.class);
+        // 1. 创建请求对象
+        IndexRequest request = new IndexRequest("items");
+        // 2. 添加请求参数
+        request.source(JSONUtil.toJsonStr(itemDoc), XContentType.JSON).id(itemDoc.getId());
+        // 3. 发送请求
+        client.index(request, RequestOptions.DEFAULT);
+    }
+
+    @BeforeEach
+    void setUp() {
+        client = new RestHighLevelClient(RestClient.builder(HttpHost.create("http://192.168.150.101:9200")));
+    }
+
+    @AfterEach
+    void tearDown() throws IOException {
+        if (client != null) {
+            client.close();
+        }
+    }
+}
