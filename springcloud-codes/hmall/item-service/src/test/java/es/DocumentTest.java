@@ -2,10 +2,13 @@ package es;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.hmall.item.domain.dto.ItemDoc;
 import com.hmall.item.domain.po.Item;
 import com.hmall.item.service.IItemService;
 import org.apache.http.HttpHost;
+import org.elasticsearch.action.bulk.BulkRequest;
 import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.io.IOException;
+import java.util.List;
 
 @SpringBootTest(classes = com.hmall.item.ItemApplication.class)
 public class DocumentTest {
@@ -64,6 +68,30 @@ public class DocumentTest {
                 "price", 24500
         );
         client.update(request, RequestOptions.DEFAULT);
+    }
+
+    @Test
+    void testBulkDoc() throws IOException {
+        int pageNo = 1;
+        int pageSize = 500;
+
+        while (true) {
+            Page<Item> page = itemService.lambdaQuery()
+                    .eq(Item::getStatus, 1)
+                    .page(Page.of(pageNo, pageSize));
+            List<Item> itemList = page.getRecords();
+            if (itemList == null || itemList.isEmpty()) {
+                return;
+            }
+            BulkRequest bulkRequest = new BulkRequest();
+            for (Item item : itemList) {
+                bulkRequest.add(new IndexRequest("items")
+                        .source(JSONUtil.toJsonStr(BeanUtil.copyProperties(item, ItemDoc.class)), XContentType.JSON)
+                        .id(item.getId().toString()));
+            }
+            client.bulk(bulkRequest, RequestOptions.DEFAULT);
+            pageNo++;
+        }
     }
 
     @BeforeEach
