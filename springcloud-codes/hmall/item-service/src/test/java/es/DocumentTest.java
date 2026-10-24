@@ -10,6 +10,7 @@ import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
@@ -54,6 +55,15 @@ public class DocumentTest {
         String json = response.getSourceAsString();
         ItemDoc itemDoc = JSONUtil.toBean(json, ItemDoc.class);
         System.out.println(itemDoc);
+    }
+
+    @Test
+    void testUpdateDoc () throws IOException {
+        UpdateRequest request = new UpdateRequest("items", "317578");
+        request.doc(
+                "price", 24500
+        );
+        client.update(request, RequestOptions.DEFAULT);
     }
 
     @BeforeEach
