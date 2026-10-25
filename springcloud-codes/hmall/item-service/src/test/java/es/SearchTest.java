@@ -46,6 +46,20 @@ public class SearchTest {
         parseResponse(response);
     }
 
+    @Test
+    void testBool() throws IOException {
+        SearchRequest request = new SearchRequest("items");
+        request.source().query(
+                QueryBuilders.boolQuery()
+                        .must(QueryBuilders.matchQuery("name", "牛奶"))
+                        .filter(QueryBuilders.termQuery("brand", "宾格瑞"))
+                        .filter(QueryBuilders.rangeQuery("price").gte(0).lte(200000)));
+        // 3. 执行查询
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        // 4. 处理查询结果
+        parseResponse(response);
+    }
+
     private static void parseResponse(SearchResponse response) {
         SearchHit[] hits = response.getHits().getHits();
         for (SearchHit hit : hits) {
