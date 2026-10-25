@@ -8,14 +8,18 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.text.Text;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class SearchTest {
     private RestHighLevelClient client;
@@ -74,11 +78,30 @@ public class SearchTest {
         parseResponse(response);
     }
 
+    @Test
+    void testHighlight() throws IOException {
+        SearchRequest request = new SearchRequest("items");
+        request.source().query(QueryBuilders.matchQuery("name", "牛奶"));
+        request.source().highlighter(SearchSourceBuilder.highlight().field("name")); // 添加高亮条件
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        parseResponse(response);
+    }
+
     private static void parseResponse(SearchResponse response) {
         SearchHit[] hits = response.getHits().getHits();
         for (SearchHit hit : hits) {
             String json = hit.getSourceAsString();
             ItemDoc itemDoc = JSONUtil.toBean(json, ItemDoc.class);
+            Map<String, HighlightField> hlf = hit.getHighlightFields();
+            if (hlf != null && !hlf.isEmpty()) {
+                Text[] names = hlf.get("name").getFragments();
+                StringBuilder highlightName = new StringBuilder();
+                for (Text name : names) {
+                    highlightName.append(name.string());
+                }
+                itemDoc.setName(highlightName.toString());
+
+            }
             System.out.println(itemDoc);
         }
     }
