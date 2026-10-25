@@ -31,6 +31,21 @@ public class SearchTest {
         parseResponse(response);
     }
 
+    @Test
+    void testSearch() throws IOException {
+        SearchRequest request = new SearchRequest("items");
+        // 添加match条件
+        request.source().query(QueryBuilders.matchQuery("name", "手机"));
+        // 添加term条件
+        request.source().query(QueryBuilders.termQuery("brand", "小米"));
+        // 添加range条件
+        request.source().query(QueryBuilders.rangeQuery("price").from(100000).to(200000));
+        // 3. 执行查询
+        SearchResponse response = client.search(request, RequestOptions.DEFAULT);
+        // 4. 处理查询结果
+        parseResponse(response);
+    }
+
     private static void parseResponse(SearchResponse response) {
         SearchHit[] hits = response.getHits().getHits();
         for (SearchHit hit : hits) {
