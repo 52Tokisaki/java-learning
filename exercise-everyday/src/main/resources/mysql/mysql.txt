@@ -66,3 +66,8 @@ READ UNCOMMITTED 未提交读 不能解决脏读、不可重复读、幻读
 READ COMMITTED 读已提交   不能解决不可重复读、幻读
 REPEATABLE READ 可重复读  不能解决幻读
 SERIALIZABLE 串行化       均能解决，但是效率最低
+
+12. undo log 和 redo log的区别
+redo log 记录的是数据页的物理变化，服务宕机可用来同步数据
+undo log 记录的是逻辑日志，当事务回滚时，通过逆操作回复原来的数据
+redo log 保证了事务的持久性，undo log 保证了事务的原子性和一致性
