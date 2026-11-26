@@ -13,3 +13,13 @@ Spirng中的事务如何实现： 本质是通过AOP功能，对方法前后进�
 a、 异常捕获处理，自己处理了异常，没有抛出，解决： 手动抛出 （事务通知只有捉到了目标抛出的异常，才能进行后续的回滚处理，如果目标自己处理掉异常，事务通知无法知悉）、
 b、 抛出检查异常，解决： 配置rollbackFor属性为Exception （Spring默认只会回滚非检查异常）
 c、 非public方法导致的事务失效，改为public （Spring为方法创建代理，添加事务，前提条件都是该方法是public的）
+
+4. Spring中Bean的生命周期
+a、通过BeanDefinition获取bean的定义信息
+b、调用构造函数实例化bean
+c、bean的依赖注入
+d、处理Aware接口(BeanNameAware, BeanFactoryAware, ApplicationContextAware)
+e、Bean的后置处理器（BeanPostProcessor#before 前置）
+f、初始化方法（InitializingBean#afterPropertiesSet, init-method）
+g、Bean的后置处理器（BeanPostProcessor#after 后置）
+h、Bean的销毁方法（DisposableBean#destroy, destroy-method）
